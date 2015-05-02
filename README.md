@@ -13,7 +13,7 @@ Codes developed and used in this project are available in the **src** directory.
 * Sarah T. Gille
 * Dimitris Menemenlis
 
-Chereskin and Gille conceived the project, and performed preliminary analysis. Menemenlis performed the global numerical simulations. Rocha analyzed the ADCP and model data supervised by Chereskin and Gille. Gille analyzed the altimeter data. Rocha led the paper write up, with contributions from Chereskin and Gille.
+Chereskin and Gille conceived the project, and performed preliminary analysis. Menemenlis performed the global numerical simulations. Rocha analyzed the ADCP and model data supervised by Chereskin and Gille. Gille analyzed the altimeter data. Rocha led the paper write up, with contributions from Chereskin and Gille. Menemenlis contributed to the model setup description.
 
 # Funding
 This study was funded by the NASA Ocean Surface Topography Science Team (NNX13AE44G) and the NSF Polar Program (PLR-1341431). C. B. Rocha was partially supported by  NSF (OCE 1357047).
