@@ -18,14 +18,17 @@ between the observed spectra and predictions of isotropic interior quasigeostrop
 is supported by analyses of synthetic and numerical model data. In Drake Passage, unbalanced motions
 account for about half of the near-surface kinetic energy at scales between 10 and 40 km. Model results indicate
 that ageostrophic flows imprint on the sea surface. At scales between 10 and 40 km, unbalanced motions
-account for about half of the model sea surface height variance.mcontributions
+account for about half of the model sea surface height variance.
 
-* Cesar B Rocha <<crocha@ucsd.edu>>
-* Teresa K. Chereskin
-* Sarah T. Gille
-* Dimitris Menemenlis
+# Authors contributions
+
+* [Cesar B Rocha](crocha700.github.io) <<crocha@ucsd.edu>>
+* [Teresa K. Chereskin](http://tryfan.ucsd.edu)
+* [Sarah T. Gille](http://www-pord.ucsd.edu/~sgille/)
+* [Dimitris Menemenlis](https://science.jpl.nasa.gov/people/Menemenlis/)
 
 Chereskin and Gille conceived the project, and performed preliminary analysis. Menemenlis performed the global numerical simulations. Rocha analyzed the ADCP and model data supervised by Chereskin and Gille. Gille analyzed the altimeter data. Rocha led the paper write up, with contributions from Chereskin and Gille. Menemenlis contributed to the model setup description.
 
 # Funding
-This study was funded by the NASA Ocean Surface Topography Science Team (NNX13AE44G) and the NSF Polar Program (PLR-1341431). C. B. Rocha was partially supported by  NSF (OCE 1357047).
+This study was funded by the NASA Ocean Surface Topography Science Team (NNX13AE44G) and the SWOT Science Definition Team (NNX13AE85G), and the NSF Polar Program (PLR-1341431). C. B. Rocha was partially supported by NSF (OCE 1357047).
+
