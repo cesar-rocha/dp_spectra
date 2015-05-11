@@ -1,5 +1,5 @@
 # dp_spectra
-This repository contains codes, notebooks, and links to data for "Mesoscale to submesoscale wavenumber spectra in Drake Passage" by C. B. Rocha, T. K. Chereskin, S. T. Gille, and D. Menemenlis (submitted to JPO). An index notebook to guide you through is available [here](http://nbviewer.ipython.org/github/crocha700/dp_spectra/blob/master/index.ipynb). 
+This repository contains codes, notebooks, and links to data for "[Mesoscale to submesoscale wavenumber spectra in Drake Passage](http://crocha700.github.io/pdfs/dp_spectra_submitted_twocols.pdf)" by C. B. Rocha, T. K. Chereskin, S. T. Gille, and D. Menemenlis (submitted to JPO). An index notebook to guide you through is available [here](http://nbviewer.ipython.org/github/crocha700/dp_spectra/blob/master/index.ipynb). 
 
 Codes developed and used in this project are available in the **src** directory. The most important codes were collected into a legit Python package, [**pyspec**](https://github.com/crocha700/pyspec). The repository for this package contains documentation, tests, and IPython notebooks showcasing the use of the most common functions.
 
@@ -27,7 +27,7 @@ account for about half of the model sea surface height variance.
 * [Sarah T. Gille](http://www-pord.ucsd.edu/~sgille/)
 * [Dimitris Menemenlis](https://science.jpl.nasa.gov/people/Menemenlis/)
 
-Chereskin and Gille conceived the project, and performed preliminary analysis. Menemenlis performed the global numerical simulations. Rocha analyzed the ADCP and model data supervised by Chereskin and Gille. Gille analyzed the altimeter data. Rocha led the paper write up, with contributions from Chereskin and Gille. Menemenlis contributed to the model setup description.
+Chereskin and Gille conceived the Drake Passage wavenumber spectra project, and performed preliminary analysis. Menemenlis performed the global numerical simulations together with other MITgcm developers. Rocha analyzed the ADCP, synthetic, and model data supervised by Chereskin and Gille. Gille analyzed the altimeter data. Rocha led the paper write up, with significant contributions from Chereskin and Gille. Menemenlis contributed to the text of Section 6, and the discussion relative to the model results.
 
 # Funding
 This study was funded by the NASA Ocean Surface Topography Science Team (NNX13AE44G) and the SWOT Science Definition Team (NNX13AE85G), and the NSF Polar Program (PLR-1341431). C. B. Rocha was partially supported by NSF (OCE 1357047).
