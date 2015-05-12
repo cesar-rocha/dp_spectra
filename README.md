@@ -27,7 +27,7 @@ account for about half of the model sea surface height variance.
 * [Sarah T. Gille](http://www-pord.ucsd.edu/~sgille/)
 * [Dimitris Menemenlis](https://science.jpl.nasa.gov/people/Menemenlis/)
 
-Chereskin and Gille conceived the Drake Passage wavenumber spectra project, and performed preliminary analysis. Menemenlis performed the global numerical simulations together with other MITgcm developers. Rocha analyzed the ADCP, synthetic, and model data supervised by Chereskin and Gille. Gille analyzed the altimeter data. Rocha led the paper write up, with significant contributions from Chereskin and Gille. Menemenlis contributed to the text of Section 6, and the discussion relative to the model results.
+Chereskin and Gille conceived the Drake Passage wavenumber spectra project, and performed preliminary analysis. Menemenlis performed the global numerical simulations together with other MITgcm developers. Rocha analyzed the ADCP, synthetic, and model data supervised by Chereskin and Gille. Gille analyzed the altimeter data. Rocha led the paper write up, with significant contributions from Chereskin and Gille. Menemenlis reviewed the text of Section 6 and the discussion relative to the model results.
 
 # Funding
 This study was funded by the NASA Ocean Surface Topography Science Team (NNX13AE44G) and the SWOT Science Definition Team (NNX13AE85G), and the NSF Polar Program (PLR-1341431). C. B. Rocha was partially supported by NSF (OCE 1357047).
