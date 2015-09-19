@@ -52,12 +52,12 @@ def normalize(evecs,z):
 
     return evecs
 
-def wave_structure(a,z,k0):
+def wave_structure(a,z,k0,xmax=2*pi):
    """Compute wave structure """
    aabs = np.abs(a)
    aphase = np.arctan2(a.imag,a.real)
 
-   x = np.linspace(0.,2*pi,100)
+   x = np.linspace(0.,xmax,100)
    X,Z = np.meshgrid(x,z)
    aabs = aabs.repeat(x.size).reshape(X.shape)
    aphase = aphase.repeat(x.size).reshape(X.shape)
@@ -99,11 +99,14 @@ def qg_stability(N2,ubar,z,k=1.,lat=50.,structure=True):
     else:
         return eval_max,evec_max
 
+def qg_stability_2d(N2,ubar,vbar,z,k,l,lat,structure=False):
 
-def qg_stability_2d(N2,ubar,vbar,z,k,l,lat=50.,structure=False):
 
     f0 = sw.f(lat)
     beta = 2*7.29e-5*np.cos(lat*pi/180.)/6371.e3 
+
+    # calculate surface shear
+    ubarz, vbarz = ubar[0]-ubar[1], vbar[0]-vbar[1]
 
     dz = np.abs(z[1]-z[0])
 
@@ -124,80 +127,100 @@ def qg_stability_2d(N2,ubar,vbar,z,k,l,lat=50.,structure=False):
 
     A = (L3 + Q)
     B = L2.copy()
-    
+  
+    # append surface boundary condition
+    #A = np.vstack([np.zeros_like(z),A])
+    #B = np.vstack([np.zeros_like(z),B])
+
+    #A = np.hstack([np.zeros(z),A])
+    #B = np.hstack([np.zeros(z),B])
+
+    #print(A.shape)
+    #print(B.shape)
+
+    # the upper boundary condition
+    A[0,0] = (ubar[0]*k+vbar[0]*l)
+    A[0,1] = -(ubar[0]*k+vbar[0]*l)
+    A[0,0] += l*ubarz + k*vbarz
+    B[0,0], B[0,1] = 1.,-1. 
+
+    # bottom boundary condition satisfied
+    # (may be should include topographic gradients)
+
     try:
         evals,evecs = sp.linalg.eig(A,B)
         imax = evals.imag.argmax()
         eval_max = evals[imax]
-        evec_max = evecs[:,imax]
+        evec_max = evecs[0:,imax]
     except:
-        eval_max = np.nan
-        evec_max = np.nan*z
-            
+        eval_max = np.nan + 1.j*np.nan
+        evec_max = np.nan*z 
+           
+    print(eval_max)
+
     if structure:
         PSI, X, Z = wave_structure(evec_max,z,k)
         return eval_max,evec_max,PSI,X,Z
     else:
         return eval_max,evec_max
 
+if __name__ == "__main__":
 
-# some test cases
-#z = np.linspace(0.,-1,250)
-#dz = z[0]-z[1]
-#m0,z0 = 10.,.4
-#u = np.tanh(m0*(z+z0)) + .5
-##u = np.cos(pi*z)
-#N2 = z*0+.1
-#k = 2.
-#c,psi,PSI,X,Z = qg_stability(N2,u,z,k=k,lat=50)
-#gr = c.imag*k
+    # now load data
+    #cdrake = sp.io.loadmat('cDrake_avg.mat',squeeze_me=True,struct_as_record=False)
+    cdrake = sp.io.loadmat('C09/cDrake_C09.mat',squeeze_me=True,struct_as_record=False)
 
-# now load data
-#cdrake = sp.io.loadmat('cDrake_avg.mat',squeeze_me=True,struct_as_record=False)
-cdrake = sp.io.loadmat('C09/cDrake_C09.mat',squeeze_me=True,struct_as_record=False)
+    zv = np.array([   0,  100,  200,  300,  400,  500,  600,  700,  800,  900, 1000,
+           1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100,
+           2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200,
+           3300, 3400, 3500.])
 
-zv = np.array([   0,  100,  200,  300,  400,  500,  600,  700,  800,  900, 1000,
-       1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100,
-       2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200,
-       3300, 3400, 3500.])
+    U = np.array(cdrake['vel'].u)
+    V = np.array(cdrake['vel'].v)
 
-U = np.array(cdrake['vel'].u)
-V = np.array(cdrake['vel'].v)
+    N2 = np.array(cdrake['density'].N2)
+    zd = np.array(cdrake['density'].prs)
 
-N2 = np.array(cdrake['density'].N2)
-zd = np.array(cdrake['density'].prs)
+    zi = np.linspace(zv.min(),zv.max(),350)
+    Ui = np.interp(zi,zv,U)
+    Vi = np.interp(zi,zv,V)
+    N2i = np.interp(zi,zd,N2)
 
-zi = np.linspace(zv.min(),zv.max(),350)
-Ui = np.interp(zi,zv,U)
-Vi = np.interp(zi,zv,V)
-N2i = np.interp(zi,zd,N2)
+    coefs = np.polyfit(zi, Ui, 10)
+    Up = np.polyval(coefs, zi)
+    coefs = np.polyfit(zi, Vi, 10)
+    Vp = np.polyval(coefs, zi)
 
-coefs = np.polyfit(zi, Ui, 10)
-Up = np.polyval(coefs, zi)
-coefs = np.polyfit(zi, Vi, 10)
-Vp = np.polyval(coefs, zi)
+    #coefs = np.polyfit(zi, N2i, 10)
+    #N2p = np.polyval(coefs, zi)
 
-#coefs = np.polyfit(zi, N2i, 10)
-#N2p = np.polyval(coefs, zi)
+    #Le = np.linspace(750.,10.,100)
+    #Le = np.linspace(750.,10.,30)
+    #k = 2*pi/(Le*1.e3)
 
-Le = np.linspace(750.,10.,100)
-k = 2*pi/(Le*1.e3)
+    #gr = []
+    #for i in range(k.size):
+    #    c,psi,PSI,X,Z = qg_stability(N2i,Up,-zi,k=k[i],lat=58)    
+    #    gr.append(c.imag*k[i]) 
 
-#gr = []
-#for i in range(k.size):
-#    c,psi,PSI,X,Z = qg_stability(N2i,Up,-zi,k=k[i],lat=58)    
-#    gr.append(c.imag*k[i]) 
+    Le = np.linspace(725.,25.,70)
+    k = 2*pi/(Le*1.e3)
 
-Le = np.linspace(750.,50.,8)
-k = 2*pi/(Le*1.e3)
+    #k = np.hstack([-np.flipud(k),k])
+    #l = k.copy()
 
-k = np.hstack([-np.flipud(k),k])
-l = k.copy()
+    l = 0
 
-GR = np.zeros((k.size,l.size))
-for i in range(k.size):
-    for j in range(l.size):
-        c,psi = qg_stability_2d(N2i,Up,Vp,-zi,k=k[i],l=l[j],lat=58)
-        GR[j,i] = c.imag
+    #c,psi, A, B = qg_stability_2d(N2i,Up,Vp,-zi,k=k[10],l=l[5],lat=58)
+
+
+    #GR = np.zeros((k.size,l.size))
+    GR = np.zeros(k.size)
+    for i in range(k.size):
+        #for j in range(l.size):
+        c,psi = qg_stability_2d(N2i,Up,Vp,-zi,k=k[i],l=0.,lat=58)
+        GR[i] = c.imag
+
+    #np.savez('GR_avg.npz',k=k,l=l,GR=GR,Up=Up,Vp=Vp,N2i=N2i,zi=zi)
 
 
