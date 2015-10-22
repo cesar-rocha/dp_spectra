@@ -1,5 +1,5 @@
 # dp_spectra
-This repository contains codes, notebooks, and links to data for "[Mesoscale to submesoscale wavenumber spectra in Drake Passage](http://crocha700.github.io/pdfs/dp_spectra_submitted_twocols.pdf)" by C. B. Rocha, T. K. Chereskin, S. T. Gille, and D. Menemenlis (submitted to JPO). An index notebook to guide you through is available [here](http://nbviewer.ipython.org/github/crocha700/dp_spectra/blob/master/index.ipynb). 
+This repository contains codes, notebooks, and links to data for "[Mesoscale to submesoscale wavenumber spectra in Drake Passage](http://crocha700.github.io/pdfs/dp_spectra_submitted_twocols.pdf)" by C. B. Rocha, T. K. Chereskin, S. T. Gille, and D. Menemenlis (accepted with minor revisions, JPO). An index notebook to guide you through is available [here](http://nbviewer.ipython.org/github/crocha700/dp_spectra/blob/master/index.ipynb). 
 
 Codes developed and used in this project are available in the **src** directory. The most important codes were collected into a legit Python package, [**pyspec**](https://github.com/crocha700/pyspec). The repository for this package contains documentation, tests, and IPython notebooks showcasing the use of the most common functions.
 
