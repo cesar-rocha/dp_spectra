@@ -32,7 +32,7 @@ def pmodes(N,S,z,nn=10,dz=1.):
     """
     SM = stretching_matrix(N,S,dz)
 
-    evals, evecs  = np.linalg.eig(SM)
+    evals, evecs  = np.linalg.eig(-SM)
     isort = np.argsort(evals)
     evals=evals[isort][:nn+1]
     evecs = evecs[:,isort][:,:nn+1]
@@ -47,7 +47,7 @@ def normalize(evecs,z):
 
     ix,iy = evecs.shape
     for i in range(iy):
-        int2 = integrate.trapz(evecs[:,i]**2,-z)
+        int2 = integrate.trapz(evecs[:,i]**2,-z)/np.abs(z).max()
         evecs[:,i] = evecs[:,i]/sqrt(int2)
 
     return evecs
@@ -99,8 +99,7 @@ def qg_stability(N2,ubar,z,k=1.,lat=50.,structure=True):
     else:
         return eval_max,evec_max
 
-def qg_stability_2d(N2,ubar,vbar,z,k,l,lat,structure=False):
-
+def qg_stability_2d(N2,ubar,vbar,z,k,l,lat,hx=0.,hy=0.,structure=False):
 
     f0 = sw.f(lat)
     beta = 2*7.29e-5*np.cos(lat*pi/180.)/6371.e3 
@@ -118,6 +117,10 @@ def qg_stability_2d(N2,ubar,vbar,z,k,l,lat,structure=False):
     L2 = L - np.eye(ubar.size)*k2
     Qy = np.eye(ubar.size)*(beta  - np.array( np.matrix(L)*np.matrix(ubar).T ))
     Qx = np.eye(ubar.size)*np.array( np.matrix(L)*np.matrix(vbar).T )
+
+    # bottom bc with topography
+    Qx[-1,-1] += (f0/dz)*hx
+    Qy[-1,-1] += (f0/dz)*hy 
 
     Q = k*Qy - l*Qx
 
@@ -139,10 +142,12 @@ def qg_stability_2d(N2,ubar,vbar,z,k,l,lat,structure=False):
     #print(B.shape)
 
     # the upper boundary condition
-    A[0,0] = (ubar[0]*k+vbar[0]*l)
-    A[0,1] = -(ubar[0]*k+vbar[0]*l)
-    A[0,0] += l*ubarz + k*vbarz
-    B[0,0], B[0,1] = 1.,-1. 
+    #A[0,0] = (ubar[0]*k+vbar[0]*l)
+    #A[0,1] = -(ubar[0]*k+vbar[0]*l)
+    #A[0,0] += -(k*ubarz + l*vbarz)
+    #B[0,0], B[0,1] = dz,-dz 
+
+    #print(A[0,:5])
 
     # bottom boundary condition satisfied
     # (may be should include topographic gradients)
@@ -156,13 +161,21 @@ def qg_stability_2d(N2,ubar,vbar,z,k,l,lat,structure=False):
         eval_max = np.nan + 1.j*np.nan
         evec_max = np.nan*z 
            
-    print(eval_max)
+    #print(eval_max)
 
     if structure:
         PSI, X, Z = wave_structure(evec_max,z,k)
         return eval_max,evec_max,PSI,X,Z
     else:
         return eval_max,evec_max
+
+
+def modal_projection(A,U):
+    """ project U onto modes in columns of A """
+    ATA = np.dot(A.T,A)
+    ATU = np.dot(A.T,Up)
+    return np.dot(np.linalg.inv(ATA),ATU)
+
 
 if __name__ == "__main__":
 
@@ -203,24 +216,44 @@ if __name__ == "__main__":
     #    c,psi,PSI,X,Z = qg_stability(N2i,Up,-zi,k=k[i],lat=58)    
     #    gr.append(c.imag*k[i]) 
 
-    Le = np.linspace(725.,25.,70)
+    #Le = np.linspace(1000.,1.,50)
+    Le = np.logspace(3,5.,50)
     k = 2*pi/(Le*1.e3)
 
-    #k = np.hstack([-np.flipud(k),k])
-    #l = k.copy()
+    k = np.hstack([-np.flipud(k),k])
+    l = k.copy()
 
-    l = 0
+    f0 = sw.f(-58)
+    S = f0**2/N2i
+    N = N2i.size
+
+    evals, evecs = pmodes(N,S,-zi,nn=10,dz=zi[2]-zi[1])
+
+    xi = integrate.trapz(evecs[:,1]**3,zi)/zi.max()
+    delta = .25*((np.sqrt(xi**2+4.)-xi)**2)
+
+    # project Ui onto evecs
+    #A = evecs
+    #ATA = np.dot(A.T,A)
+    #ATU = np.dot(A.T,Up)
+    #alpha = np.dot(np.linalg.inv(ATA),ATU)
+
+    au, av = modal_projection(evecs,Up), modal_projection(evecs,Vp)
+
+    #l = 0
 
     #c,psi, A, B = qg_stability_2d(N2i,Up,Vp,-zi,k=k[10],l=l[5],lat=58)
 
-
-    #GR = np.zeros((k.size,l.size))
-    GR = np.zeros(k.size)
+    GR = np.zeros((k.size,l.size))
     for i in range(k.size):
-        #for j in range(l.size):
-        c,psi = qg_stability_2d(N2i,Up,Vp,-zi,k=k[i],l=0.,lat=58)
-        GR[i] = c.imag
+    
+       for j in range(l.size):
 
-    #np.savez('GR_avg.npz',k=k,l=l,GR=GR,Up=Up,Vp=Vp,N2i=N2i,zi=zi)
+            print(i,j)
+
+            c,psi = qg_stability_2d(N2i,Up,Vp,-zi,k=k[i],l=l[j],lat=58,hy=0.,hx=0.)
+            GR[i,j] = c.imag
+
+    np.savez('GR09.npz',k=k,l=l,GR=GR,Up=Up,Vp=Vp,N2i=N2i,zi=zi)
 
 

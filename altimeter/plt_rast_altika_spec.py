@@ -85,6 +85,8 @@ plt.text(0.15, 5., "AltiKa", size=25, rotation=0.,
 add_second_axis(ax1)
     
 plt.savefig('figs/spec_altika_asc_desc',bbox_inches='tight')
+#plt.savefig('figs/spec_altika_asc_desc.eps',format='eps',bbox_inches='tight'\
+#        ,  rasterized=True, dpi=300)
 plt.savefig('figs/spec_altika_asc_desc.eps',format='eps',bbox_inches='tight'\
-        ,  rasterized=True, dpi=300)
+        ,  rasterized=True,dpi=25)
 #plt.savefig('figs/spec_altika_asc_desc.pdf',format='pdf',bbox_inches='tight')

@@ -15,7 +15,7 @@ def spec_est_meridional(U,dx):
     """ Computes 1d (meridional) spectral estimates of 3d llc_4320 fields"""
     ix,jx,kx = U.shape
     N = ix          # record length
-    df = 1./(N*dx)  # frequency resolution [cycles / (unit time)]
+    df = 1./(N*dx)  # frequency resolution [cycles / (unit dx)]
     fNy = 1./(2*dx) # Nyquist frequency
     an = np.fft.fft(U,axis=0)
 
@@ -29,7 +29,7 @@ def spec_est_zonal(U,dx):
     """ Computes 1d (zonal) spectral estimates of 3d llc_4320 fields"""
     ix,jx,kx = U.shape
     N = jx          # record length
-    df = 1./(N*dx)  # frequency resolution [cycles / (unit time)]
+    df = 1./(N*dx)  # frequency resolution [cycles / (unit dx)]
     fNy = 1./(2*dx) # Nyquist frequency
     an = np.fft.fft(U,axis=1)
 

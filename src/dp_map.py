@@ -14,10 +14,10 @@ class drake_passage_map(object):
         lat_1=-55,
         lon_0=-75,
         proj="lcc",
-        linewidth=.5,
-        fontsize=18.,
+        linewidth=.1,
+        fontsize=10.,
         fig_label="c",
-        fig_title="AlTiKa"):
+        fig_title="AltiKa"):
 
             self.lonmin = lonmin
             self.lonmax = lonmax
@@ -46,10 +46,10 @@ class drake_passage_map(object):
             labels=[0, 0, 0, 1], linewidth=self.lw, fontsize=self.fs)
 
     def set_label(self,pos=(1650212,1485371)):
-        plt.text(pos[0],pos[1], self.label,size=32)
+        plt.text(pos[0],pos[1], self.label,size=10)
 
     def set_title(self,pos=(1400212,1495371)):
-        plt.text(pos[0],pos[1], self.title, size=25, rotation=0.,
+        plt.text(pos[0],pos[1], self.title, size=8, rotation=0.,
             ha="center", va="center",bbox = dict(boxstyle="round",ec='k',fc='w'))
 
 
