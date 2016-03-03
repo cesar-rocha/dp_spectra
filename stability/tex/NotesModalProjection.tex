@@ -1,0 +1,162 @@
+\documentclass[11pt]{article}
+
+%% WRY has commented out some unused packages %%
+%% If needed, activate these by uncommenting
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+%\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+\geometry{a4paper,left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+%\geometry{landscape}                % Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+
+\usepackage{natbib}
+
+%for figures
+%\usepackage{graphicx}
+
+\usepackage{color}
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{mylilas}{RGB}{170,55,241}
+%% for graphics this one is also OK:
+\usepackage{epsfig}
+
+%% AMS mathsymbols are enabled with
+\usepackage{amssymb,amsmath}
+
+%% more options in enumerate
+\usepackage{enumerate}
+%\usepackage{enumitem}
+
+%% insert code
+\usepackage{listings}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{hyperref}
+
+%% To make really wide whats that cover everything:
+\usepackage{scalerel}
+\usepackage{stackengine}
+\stackMath
+\def\hatgap{2pt}
+\def\subdown{-2pt}
+\newcommand\what[2][]{%
+\renewcommand\stackalignment{l}%
+\stackon[\hatgap]{#2}{%
+\stretchto{%
+    \scalerel*[\widthof{$#2$}]{\kern-.6pt\bigwedge\kern-.6pt}%
+    {\rule[-\textheight/2]{1ex}{\textheight}}%WIDTH-LIMITED BIG WEDGE
+}{0.5ex}% THIS SQUEEZES THE WEDGE TO 0.5ex HEIGHT
+_{\smash{\belowbaseline[\subdown]{\scriptstyle#1}}}%
+}}
+
+% Default fixed font does not support bold face
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+
+% Custom colors
+\usepackage{color}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+% colors
+\usepackage{graphicx,xcolor,lipsum}
+
+
+\usepackage{mathtools}
+
+\usepackage{graphicx}
+\newcommand*{\matminus}{%
+  \leavevmode
+  \hphantom{0}%
+  \llap{%
+    \settowidth{\dimen0 }{$0$}%
+    \resizebox{1.1\dimen0 }{\height}{$-$}%
+  }%
+}
+
+% commmand for this doc
+\newcommand{\So}{\mathcal{S}}
+\newcommand{\bvth}{\bar{\vth}}
+\newcommand{\kappat}{\kappa_{tot}}
+\newcommand{\kappae}{\kappa_{e}}
+\newcommand{\kappaN}{\kappa_{n}}
+\newcommand{\kappaoc}{\kappa_{oc}}
+
+
+\title{Notes on Modal Projection and non-zero vertical shear at the boundary, etc.}
+\author{Cesar \& Bill}
+\date{\today}
+
+\begin{document}
+
+\include{symbols}
+
+
+\maketitle
+
+%\section{}
+
+We want to calculate the mean quasigeostrophic potential vorticity gradients:
+\beq
+    \label{meanQGPV}
+    Q_y = \beta - \sL V(z)\com \qquad \text{and} \qquad Q_x = \sL U(z) \com
+\eeq
+where $\sL \defn \p_z (f_0/N)^2 \p_z $ is the stretching operator. Calculation of $\sL U$ and $\sL V$
+from data is typically noisy. To reduce the noise, we want to project the basic state velocity onto
+the familiar vertical modes $\sp_n$ that satisfy
+\beq
+\label{modes}
+\sL \sp_n = - \kappa_n^2 \sp_n\com
+\eeq
+with $\sp_n' = 0\com~ z = -h, 0$. However, with nonzero vertical shear at the boundaries we cannot differentiate the series for $U(z)$ and $V(z) $. So, instead of the tradition series, we write
+\beq
+\label{decomp}
+U(z) \approx U_s(z) + U_i(z)\com
+\eeq
+where $U_i(z)$ is an ``interior'', boundary shearless, velocity component:
+\beq
+\label{Uint}
+U_i(z) = \sum_{n=0}^{\nmax} \breve{U}_n \sp_n\com \qquad \breve{U}_n = \tfrac{1}{h}\int_{-h}^{0}\!\! \sp_n \, [U(z)-U_s(z)]  \dd z\com
+\eeq
+and $U_s(z)$ satisfies $U'(\zm) = U_s'(\zm)$ and  $U'(\zp) = U_s'(\zp)$. Also in \eqref{decomp} the approximate sign stems from the truncated nature of the series \eqref{Uint}. A simple choice is
+\beq
+\label{dUsurf}
+\frac{\dd U_s}{\dd z} = \frac{N^2(z)}{N^2(0)} \frac{z + h}{h} U'(0) - \frac{N^2(z)}{N^2(-h)} \frac{z}{h} U'(-h)\per
+\eeq
+The reason we include the $N^2$ factors above, e.g. $N^2(z)/N^2(0)$ is that we want to calculate $\sL U_s$ as smoothly as possible, and hence independently of derivatives of $N^2(z)$. With this choice we have
+\beq
+\label{Usurf}
+U_s(z) = \frac{U'(0)}{N^2(0) h}\int_{0}^{z} N^2(z') (z' + h) \dd z' -  \frac{U'(-h)}{N^2(-h) h}\int_{0}^{z} N^2(z') z'  \dd z  + A \com 
+\eeq
+where $A$ is determined by imposing a no net transport condition
+\beq
+\int_{-h}^{0} U_s'(z) \dd z = 0\per
+\eeq
+We obtain
+\beq
+\label{A}
+A =  -\frac{U'(0)}{N^2(0) h^2}\int_{-h}^0 \dd z \int_{0}^{z} N^2(z') (z' + h) \dd z' +  \frac{U'(-h)}{N^2(-h) h^2} \int_{-h}^0 \dd z  \int_{0}^{z} N^2(z') z'  \dd z
+\eeq
+The integrals above are calculated numerically for an arbitrary buoyancy profile $N^2(z)$. 
+
+% for constant N(z) we calculate the integrals analytically
+%\beq
+%\label{A}
+%A = \frac{1}{3 h }\left( \frac{U'(-h)}{2} - U'(0) \right) \per
+%\eeq
+%Thus
+%\beq
+%\label{Usurf2}
+%U_s(z) = \frac{U'(0)}{h}\left( \frac{z^2}{2} + z h - \frac{1}{3}\right) - \frac{U'(-h)}{h} \left(\frac{z^2}{2} + \frac{1}{6} \right) \per
+%\eeq
+
+
+In summary, knowledge of the shear at the boundaries determines the ``surface'' velocity component $U_s(z)$ that
+can be then be subtracted from the total velocity to obtain a ``interior'' velocity component $U_i(z)$. Because $U_i(z)$ is shearless at the boundaries, we can accurately calculate $\sL U$
+\beq
+\sL U \approx \sL U_s + \sL U_i  = \frac{f_0^2}{N^2(0)} \frac{U'(0)}{h}
+- \frac{f_0^2}{N^2(-h)} \frac{U'(-h)}{h} - \sum_{n=1}^{\nmax} \kappa_n^2 \breve{U}_n \sp_n \per
+\eeq
+
+\end{document}
